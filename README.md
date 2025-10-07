@@ -245,9 +245,9 @@ Retrieve properties with optional filters.
   "properties": [
     {
       "id": "uuid",
-      "property_name": "Green Valley PG",
-      "city": "Bangalore",
-      "rent_per_month": 8500,
+      "property_name": "Vedaditya Boys Hostel",
+      "city": "Rajkot",
+      "rent_per_month": 5500,
       "available_rooms": 5,
       "amenities": ["wifi", "parking", "meals"],
       "images": [{"image_url": "url", "image_order": 1}],
