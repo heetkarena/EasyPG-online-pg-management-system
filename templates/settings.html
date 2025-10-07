@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - EasyPG</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="settings-page">
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <a href="{{ url_for('dashboard_page') }}">
+                    <i class="fas fa-home"></i>
+                    <span>EasyPG</span>
+                </a>
+            </div>
+            <div class="nav-menu">
+                <a href="{{ url_for('dashboard_page') }}" class="nav-link">Dashboard</a>
+                <a href="{{ url_for('search_page') }}" class="nav-link">Search</a>
+                <a href="{{ url_for('saved_page') }}" class="nav-link">Saved</a>
+                <a href="{{ url_for('profile_page') }}" class="nav-link">Profile</a>
+                <a href="{{ url_for('settings_page') }}" class="nav-link active">Settings</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Settings Content -->
+    <div class="settings-container">
+        <div class="settings-header">
+            <h1>Settings</h1>
+            <p>Manage your account preferences and settings</p>
+        </div>
+
+        <div class="settings-content">
+            <!-- Notification Settings -->
+            <div class="settings-section">
+                <h2>Notifications</h2>
+                <div class="settings-list">
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h3>Email Notifications</h3>
+                            <p>Receive email updates about new properties and messages</p>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="emailNotifications" checked onchange="updateSetting('email', this.checked)" aria-label="Email Notifications">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h3>SMS Notifications</h3>
+                            <p>Get SMS alerts for important updates</p>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="smsNotifications" onchange="updateSetting('sms', this.checked)" aria-label="SMS Notifications">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h3>Push Notifications</h3>
+                            <p>Receive browser push notifications</p>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="pushNotifications" checked onchange="updateSetting('push', this.checked)" aria-label="Push Notifications">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Privacy Settings -->
+            <div class="settings-section">
+                <h2>Privacy</h2>
+                <div class="settings-list">
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h3>Profile Visibility</h3>
+                            <p>Control who can see your profile information</p>
+                        </div>
+                        <select class="setting-select" onchange="updateSetting('profileVisibility', this.value)" aria-label="Profile Visibility">
+                            <option value="public">Public</option>
+                            <option value="owners" selected>PG Owners Only</option>
+                            <option value="private">Private</option>
+                        </select>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h3>Show Online Status</h3>
+                            <p>Let others see when you're online</p>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="onlineStatus" checked onchange="updateSetting('onlineStatus', this.checked)" aria-label="Show Online Status">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h3>Allow Contact from Owners</h3>
+                            <p>Allow PG owners to contact you directly</p>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="allowContact" checked onchange="updateSetting('allowContact', this.checked)" aria-label="Allow Contact from Owners">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Search Preferences -->
+            <div class="settings-section">
+                <h2>Search Preferences</h2>
+                <div class="settings-list">
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h3>Default Location</h3>
+                            <p>Set your preferred search location</p>
+                        </div>
+                        <input type="text" class="setting-input" placeholder="Enter city or area" value="Bangalore" onchange="updateSetting('defaultLocation', this.value)" aria-label="Default Location">
+                    </div>
+                    
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h3>Budget Range</h3>
+                            <p>Set your preferred budget range</p>
+                        </div>
+                        <div class="budget-inputs">
+                            <input type="number" class="setting-input" placeholder="Min" value="5000" onchange="updateSetting('minBudget', this.value)" aria-label="Minimum Budget">
+                            <span>to</span>
+                            <input type="number" class="setting-input" placeholder="Max" value="15000" onchange="updateSetting('maxBudget', this.value)" aria-label="Maximum Budget">
+                        </div>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h3>Gender Preference</h3>
+                            <p>Set your accommodation preference</p>
+                        </div>
+                        <select class="setting-select" onchange="updateSetting('genderPreference', this.value)" aria-label="Gender Preference">
+                            <option value="any">Any</option>
+                            <option value="boys_only" selected>Boys Only</option>
+                            <option value="girls_only">Girls Only</option>
+                            <option value="co_living">Co-living</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Account Settings -->
+            <div class="settings-section">
+                <h2>Account</h2>
+                <div class="settings-list">
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h3>Language</h3>
+                            <p>Choose your preferred language</p>
+                        </div>
+                        <select class="setting-select" onchange="updateSetting('language', this.value)" aria-label="Language">
+                            <option value="en" selected>English</option>
+                            <option value="hi">Hindi</option>
+                            <option value="ta">Tamil</option>
+                            <option value="te">Telugu</option>
+                            <option value="kn">Kannada</option>
+                        </select>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h3>Theme</h3>
+                            <p>Choose your preferred theme</p>
+                        </div>
+                        <select class="setting-select" onchange="updateSetting('theme', this.value)" aria-label="Theme">
+                            <option value="light" selected>Light</option>
+                            <option value="dark">Dark</option>
+                            <option value="auto">Auto</option>
+                        </select>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h3>Two-Factor Authentication</h3>
+                            <p>Add an extra layer of security to your account</p>
+                        </div>
+                        <button class="btn btn-outline" onclick="setup2FA()">
+                            <i class="fas fa-shield-alt"></i>
+                            Enable 2FA
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Data & Storage -->
+            <div class="settings-section">
+                <h2>Data & Storage</h2>
+                <div class="settings-list">
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h3>Clear Search History</h3>
+                            <p>Remove all your search history data</p>
+                        </div>
+                        <button class="btn btn-outline" onclick="clearSearchHistory()">
+                            <i class="fas fa-trash"></i>
+                            Clear History
+                        </button>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h3>Download Data</h3>
+                            <p>Download a copy of your account data</p>
+                        </div>
+                        <button class="btn btn-outline" onclick="downloadData()">
+                            <i class="fas fa-download"></i>
+                            Download
+                        </button>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h3>Delete Account</h3>
+                            <p>Permanently delete your account and all data</p>
+                        </div>
+                        <button class="btn btn-danger" onclick="deleteAccount()">
+                            <i class="fas fa-trash"></i>
+                            Delete Account
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/settings.js') }}"></script>
+</body>
+</html>

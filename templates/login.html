@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - EasyPG</title>
+    <link rel="stylesheet" href="static/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="auth-page">
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <a href="/">
+                    <i class="fas fa-home"></i>
+                    <span>EasyPG</span>
+                </a>
+            </div>
+            <div class="nav-menu">
+                <a href="/" class="nav-link">
+                    <i class="fas fa-arrow-left"></i>
+                    Back to Home
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Auth Container -->
+    <div class="auth-container">
+        <div class="auth-card">
+            <!-- User Type Icon -->
+            <div class="user-type-icon" id="userTypeIcon">
+                <i class="fas fa-graduation-cap"></i>
+            </div>
+
+            <!-- Admin Badge (hidden by default) -->
+            <div class="admin-badge" id="adminBadge" >
+                <i class="fas fa-shield-alt"></i>
+                <span>Admin Access</span>
+            </div>
+
+            <!-- Auth Header -->
+            <div class="auth-header">
+                <h1 id="authTitle">Student Portal</h1>
+                <p id="authDescription">Find and book your perfect PG accommodation</p>
+            </div>
+
+            <!-- User Type Tabs -->
+            <div class="user-type-tabs" id="userTypeTabs">
+                <button class="tab-btn active" data-type="student" onclick="switchUserType('student')">
+                    <i class="fas fa-graduation-cap"></i>
+                    <span>Student</span>
+                </button>
+                <button class="tab-btn" data-type="owner" onclick="switchUserType('owner')">
+                    <i class="fas fa-building"></i>
+                    <span>PG Owner</span>
+                </button>
+            </div>
+
+            <!-- Auth Toggle -->
+            <div class="auth-toggle">
+                <button class="toggle-btn active" id="loginBtn" onclick="switchAuthMode(true)">Sign In</button>
+                <button class="toggle-btn" id="signupBtn" onclick="switchAuthMode(false)">Sign Up</button>
+            </div>
+
+            <!-- Auth Form -->
+            <form class="auth-form" id="authForm" onsubmit="handleFormSubmit(event)">
+                <!-- Full Name (Signup only) -->
+                <div class="form-group" id="fullNameGroup" >
+                    <label for="fullName">Full Name</label>
+                    <div class="input-group">
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="fullName" name="fullName" placeholder="Enter your full name">
+                    </div>
+                </div>
+
+                <!-- Email -->
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <div class="input-group">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                    </div>
+                </div>
+
+                <!-- Phone (Signup only) -->
+                <div class="form-group" id="phoneGroup">
+                    <label for="phone">Phone Number</label>
+                    <div class="input-group">
+                        <i class="fas fa-phone"></i>
+                        <input type="tel" id="phone" name="phone" placeholder="Enter your phone number">
+                    </div>
+                </div>
+
+                <!-- Password -->
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="input-group">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                        <button type="button" class="password-toggle" onclick="togglePassword('password')" title="Show password" aria-label="Show password">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Confirm Password (Signup only) -->
+                <div class="form-group" id="confirmPasswordGroup" >
+                    <label for="confirmPassword">Confirm Password</label>
+                    <div class="input-group">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm your password">
+                        <button type="button" class="password-toggle" onclick="togglePassword('confirmPassword')" title="Show password" aria-label="Show password">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>      
+                </div>
+
+                <!-- Login Options -->
+                <div class="login-options" id="loginOptions">
+                    <div class="remember-forgot">
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="remember">
+                            <span class="checkmark"></span>
+                            Remember me
+                        </label>
+                        <a href="#" class="forgot-link">Forgot Password?</a>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="btn btn-primary btn-full" id="submitBtn">
+                    <span id="submitText">Sign In</span>
+                    <div class="loading-spinner" id="loadingSpinner" >
+                        <i class="fas fa-spinner fa-spin"></i>
+                    </div>
+                </button>
+            </form>
+
+            <!-- Admin Note -->
+            <div class="admin-note" id="adminNote" >
+                <i class="fas fa-info-circle"></i>
+                <p>Admin access is restricted. Please contact system administrator for credentials.</p>
+            </div>
+
+            <!-- Social Login -->
+            <div class="social-login">
+                <div class="divider">
+                    <span>or continue with</span>
+                </div>
+                <div class="social-buttons">
+                    <button class="social-btn google-btn" type="button">
+                        <i class="fab fa-google"></i>
+                        <span>Google</span>
+                    </button>
+                    <button class="social-btn facebook-btn" type="button">
+                        <i class="fab fa-facebook-f"></i>
+                        <span>Facebook</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <!-- <div class="loading-overlay" id="loadingOverlay" >
+        <div class="loading-content">
+            <div class="loading-spinner-large">
+                <i class="fas fa-spinner fa-spin"></i>
+            </div>
+            <p>Please wait...</p>
+        </div>
+    </div>     -->
+
+    <script src="static/js/auth.js"></script>
+
+    <script> 
+        window.addEventListener("load", () => {
+            const spinner = document.querySelector(".fa-spinner");
+            if (spinner) spinner.style.display = "none";
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - EasyPG</title>
+    <link rel="stylesheet" href="static/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="dashboard-page">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-brand">
+                <i class="fas fa-home"></i>
+                <span>EasyPG</span>
+            </div>
+        </div>
+        
+        <nav class="sidebar-nav">
+            <a href="/dashboard" class="nav-item active">
+                <i class="fas fa-tachometer-alt"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="/search" class="nav-item">
+                <i class="fas fa-search"></i>
+                <span id="searchNavText">Search PGs</span>
+            </a>
+            <a href="/saved" class="nav-item">
+                <i class="fas fa-heart"></i>
+                <span id="savedNavText">Saved PGs</span>
+            </a>
+            <a href="/messages" class="nav-item">
+                <i class="fas fa-comments"></i>
+                <span>Messages</span>
+                <span class="badge">3</span>
+            </a>
+            <a href="/payments" class="nav-item">
+                <i class="fas fa-credit-card"></i>
+                <span>Payments</span>
+            </a>
+            <a href="/profile" class="nav-item">
+                <i class="fas fa-user"></i>
+                <span>Profile</span>
+            </a>
+            <a href="/settings" class="nav-item">
+                <i class="fas fa-cog"></i>
+                <span>Settings</span>
+            </a>
+        </nav>
+        
+        <div class="sidebar-footer">
+            <div class="user-info">
+                <div class="user-avatar" id="sidebarInitials">U</div>
+                <div class="user-details">
+                    <span class="user-name" id="profileName">User</span>
+                    <span class="user-role" id="profileRole">Student</span>
+                </div>
+            </div>
+            <button type="button" class="logout-btn" onclick="signOut()" title="Sign out" aria-label="Sign out">
+                <i class="fas fa-sign-out-alt"></i>
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Header -->
+        <header class="dashboard-header">
+            <div class="header-left">
+                <button type="button" class="sidebar-toggle" id="sidebarToggleButton" onclick="toggleSidebar()" title="Toggle sidebar" aria-label="Toggle sidebar">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="welcome-text">
+                    <h1>Welcome back, <span id="welcomeName">User</span>!</h1>
+                    <p id="welcomeDescription">Here's what's happening with your PG search</p>
+                </div>
+            </div>
+            
+            <div class="header-right">
+                <span class="user-badge" id="userBadge">Student</span>
+                
+                <button type="button" class="header-btn" onclick="showNotifications()" title="Show notifications" aria-label="Show notifications">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-dot"></span>
+                </button>
+                
+                <button type="button" class="header-btn" id="messageBtn" onclick="showMessages()" title="Show messages" aria-label="Show messages">
+                    <i class="fas fa-envelope"></i>
+                </button>
+                
+                <div class="user-menu">
+                    <button type="button" class="user-avatar" id="userInitials" onclick="toggleUserMenu()" title="User menu" aria-label="User menu">U</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Dashboard Content -->
+        <div class="dashboard-content">
+            <!-- Stats Grid -->
+            <section class="stats-section">
+                <div class="stats-grid" id="statsGrid">
+                    <!-- Stats will be loaded dynamically -->
+                </div>
+            </section>
+
+            <!-- Quick Actions -->
+            <section class="quick-actions-section">
+                <div class="section-header">
+                    <h2>Quick Actions</h2>
+                    <button type="button" class="btn btn-primary" id="addPropertyBtn" onclick="window.location.href='list-property.html'">
+                        <i class="fas fa-plus"></i>
+                        Add Property
+                    </button>
+                </div>
+                <div class="quick-actions" id="quickActions">
+                    <!-- Actions will be loaded dynamically -->
+                </div>
+            </section>
+
+            <!-- Recent PGs/Properties -->
+            <section class="recent-section">
+                <div class="section-header">
+                    <h2 id="recentTitle">Recently Viewed PGs</h2>
+                    <a href="/search" class="view-all-link">View All</a>
+                </div>
+                <div clas   s="recent-pgs" id="recentPGs">
+                    <!-- PGs will be loaded dynamically -->
+                </div>
+            </section>
+
+            <!-- Activity Feed -->
+            <section class="activity-section">
+                <div class="section-header">
+                    <h2>Recent Activity</h2>
+                </div>
+                <div class="activity-feed">
+                    <div class="activity-item">
+                        <div class="activity-icon">
+                            <i class="fas fa-heart"></i>
+                        </div>
+                        <div class="activity-content">
+                            <p><strong>You saved</strong> Green Valley PG</p>
+                            <span class="activity-time">2 hours ago</span>
+                        </div>
+                    </div>
+                    
+                    <div class="activity-item">
+                        <div class="activity-icon">
+                            <i class="fas fa-eye"></i>
+                        </div>
+                        <div class="activity-content">
+                            <p><strong>You viewed</strong> Sunrise Residency</p>
+                            <span class="activity-time">5 hours ago</span>
+                        </div>
+                    </div>
+                    
+                    <div class="activity-item">
+                        <div class="activity-icon">
+                            <i class="fas fa-comments"></i>
+                        </div>
+                        <div class="activity-content">
+                            <p><strong>New message</strong> from PG Owner</p>
+                            <span class="activity-time">1 day ago</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Loading Overlay -->
+    <!-- <div class="loading-overlay" id="loadingOverlay" >
+        <div class="loading-content">
+            <div class="loading-spinner-large">
+                <i class="fas fa-spinner fa-spin"></i>
+            </div>
+            <p>Loading dashboard...</p>
+        </div>
+    </div> -->
+
+    <script src="static/js/dashboard.js"></script>
+</body>
+</html>

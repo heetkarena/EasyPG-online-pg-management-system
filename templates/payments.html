@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payments - EasyPG</title>
+    <link rel="stylesheet" href="static/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="dashboard-page">
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <a href="dashboard.html">
+                    <i class="fas fa-home"></i>
+                    <span>EasyPG</span>
+                </a>
+            </div>
+            <div class="nav-menu">
+                <a href="dashboard.html" class="nav-link">Dashboard</a>
+                <a href="search.html" class="nav-link">Search</a>
+                <a href="saved.html" class="nav-link">Saved</a>
+                <a href="profile.html" class="nav-link">Profile</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Payments Content -->
+    <div class="payments-container">
+        <div class="payments-header">
+            <h1>Payments</h1>
+            <p>Manage your payments and transaction history</p>
+        </div>
+
+        <div class="payments-content">
+            <!-- Payment Summary -->
+            <div class="payment-summary">
+                <div class="summary-card">
+                    <div class="summary-item">
+                        <div class="summary-icon">
+                            <i class="fas fa-credit-card" ></i>
+                        </div>
+                        <div class="summary-info">
+                            <h3>Total Paid</h3>
+                            <p>₹25,000</p>
+                        </div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-icon">
+                            <i class="fas fa-clock" ></i>
+                        </div>
+                        <div class="summary-info">
+                            <h3>Pending</h3>
+                            <p>₹8,500</p>
+                        </div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-icon">
+                            <i class="fas fa-calendar" ></i>
+                        </div>
+                        <div class="summary-info">
+                            <h3>Next Due</h3>
+                            <p>15 Mar 2024</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Payment Tabs -->
+            <div class="payment-tabs">
+                <button class="tab-btn active" onclick="showTab('transactions')">Transactions</button>
+                <button class="tab-btn" onclick="showTab('pending')">Pending Payments</button>
+                <button class="tab-btn" onclick="showTab('methods')">Payment Methods</button>
+            </div>
+
+            <!-- Transactions Tab -->
+            <div class="tab-content active" id="transactions">
+                <div class="section-header">
+                    <h2>Transaction History</h2>
+                    <div class="filter-actions">
+                        <select class="filter-select" onchange="filterTransactions(this.value)" title="Filter transactions by type" aria-label="Filter transactions by type">
+                            <option value="all">All Transactions</option>
+                            <option value="rent">Rent Payments</option>
+                            <option value="deposit">Security Deposits</option>
+                            <option value="booking">Booking Fees</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="transactions-list" id="transactionsList">
+                    <!-- Transactions will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Pending Payments Tab -->
+            <div class="tab-content" id="pending" >
+                <div class="section-header">
+                    <h2>Pending Payments</h2>
+                </div>
+                
+                <div class="pending-payments" id="pendingPayments">
+                    <!-- Pending payments will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Payment Methods Tab -->
+            <div class="tab-content" id="methods">
+                <div class="section-header">
+                    <h2>Payment Methods</h2>
+                    <button class="btn btn-primary" onclick="addPaymentMethod()">
+                        <i class="fas fa-plus"></i>
+                        Add Method
+                    </button>
+                </div>
+                
+                <div class="payment-methods" id="paymentMethods">
+                    <!-- Payment methods will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="static/js/payments.js"></script>
+</body>
+</html>

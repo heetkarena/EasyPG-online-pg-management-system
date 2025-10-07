@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Messages - EasyPG</title>
+    <link rel="stylesheet" href="static/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="dashboard-page">
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <a href="dashboard.html">
+                    <i class="fas fa-home"></i>
+                    <span>EasyPG</span>
+                </a>
+            </div>
+            <div class="nav-menu">
+                <a href="dashboard.html" class="nav-link">Dashboard</a>
+                <a href="search.html" class="nav-link">Search</a>
+                <a href="saved.html" class="nav-link">Saved</a>
+                <a href="profile.html" class="nav-link">Profile</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Messages Container -->
+    <div class="messages-container">
+        <!-- Messages Sidebar -->
+        <div class="messages-sidebar">
+            <div class="messages-header">
+                <h2>Messages</h2>
+                <button class="btn btn-sm btn-primary" onclick="newMessage()">
+                    <i class="fas fa-plus"></i>
+                    New
+                </button>
+            </div>
+            
+            <div class="search-conversations">
+                <div class="search-input-group">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search conversations..." id="searchConversations">
+                </div>
+            </div>
+            
+            <div class="conversations-list" id="conversationsList">
+                <!-- Conversations will be loaded here -->
+            </div>
+        </div>
+
+        <!-- Messages Main -->
+        <div class="messages-main">
+            <!-- No Conversation Selected -->
+            <div class="no-conversation" id="noConversation">
+                <div class="no-conversation-content">
+                    <i class="fas fa-comments"></i>
+                    <h3>Select a conversation</h3>
+                    <p>Choose a conversation from the sidebar to start messaging</p>
+                </div>
+            </div>
+
+            <!-- Active Conversation -->
+            <div class="active-conversation" id="activeConversation" >
+                <!-- Conversation Header -->
+                <div class="conversation-header">
+                    <div class="contact-info">
+                        <div class="contact-avatar">
+                            <span id="contactInitials">U</span>
+                        </div>
+                        <div class="contact-details">
+                            <h3 id="contactName">Contact Name</h3>
+                            <span id="contactStatus">Online</span>
+                        </div>
+                    </div>
+                    <div class="conversation-actions">
+                        <button class="btn btn-sm btn-outline" onclick="viewPropertyDetails()">
+                            <i class="fas fa-home"></i>
+                            View Property
+                        </button>
+                        <button class="btn btn-sm btn-outline" onclick="scheduleVisit()">
+                            <i class="fas fa-calendar"></i>
+                            Schedule Visit
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Messages Area -->
+                <div class="messages-area" id="messagesArea">
+                    <!-- Messages will be loaded here -->
+                </div>
+
+                <!-- Message Input -->
+                <div class="message-input-area">
+                    <form class="message-form" onsubmit="sendMessage(event)">
+                        <div class="message-input-group">
+                            <button type="button" class="attachment-btn" title="Attach File">
+                                <i class="fas fa-paperclip"></i>
+                            </button>
+                            <input type="text" id="messageInput" placeholder="Type your message..." required>
+                            <button type="submit" class="send-btn" title="Send Message">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="static/js/messages.js"></script>
+</body>
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saved Properties - EasyPG</title>
+    <link rel="stylesheet" href="static/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="dashboard-page">
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <a href="/dashboard">
+                    <i class="fas fa-home"></i>
+                    <span>EasyPG</span>
+                </a>
+            </div>
+            <div class="nav-menu">
+                <a href="/dashboard" class="nav-link">Dashboard</a>
+                <a href="/search" class="nav-link">Search</a>
+                <a href="/messages" class="nav-link">Messages</a>
+                <a href="/profile" class="nav-link">Profile</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Saved Properties Content -->
+    <div class="saved-container">
+        <div class="saved-header">
+            <div class="header-content">
+                <h1>Saved Properties</h1>
+                <p>Properties you've saved for later viewing</p>
+            </div>
+            <div class="header-actions">
+                <select class="sort-select" onchange="sortSavedProperties()" id="sortOptions" aria-label="Sort saved properties">
+                    <option value="recent">Recently Saved</option>
+                    <option value="price_low">Price: Low to High</option>
+                    <option value="price_high">Price: High to Low</option>
+                    <option value="rating">Highest Rated</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Saved Properties Grid -->
+        <div class="saved-content">
+            <div class="saved-stats">
+                <div class="stat-item">
+                    <span class="stat-number" id="totalSaved">8</span>
+                    <span class="stat-label">Saved Properties</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="viewedCount">5</span>
+                    <span class="stat-label">Recently Viewed</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="contactedCount">3</span>
+                    <span class="stat-label">Contacted Owners</span>
+                </div>
+            </div>
+
+            <div class="saved-properties" id="savedProperties">
+                <!-- Properties will be loaded here -->
+            </div>
+
+            <!-- Empty State -->
+            <div class="empty-state" id="emptyState" >
+                <div class="empty-content">
+                    <i class="fas fa-heart"></i>
+                    <h3>No saved properties yet</h3>
+                    <p>Start browsing properties and save your favorites to see them here</p>
+                    <a href="/search" class="btn btn-primary">
+                        <i class="fas fa-search"></i>
+                        Browse Properties
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="static/js/saved.js"></script>
+</body>
+</html>

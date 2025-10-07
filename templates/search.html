@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search PGs - EasyPG</title>
+    <link rel="stylesheet" href="static/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="search-page">
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <a href="index.html">
+                    <i class="fas fa-home"></i>
+                    <span>EasyPG</span>
+                </a>
+            </div>
+            <div class="nav-menu">
+                <a href="dashboard.html" class="nav-link">Dashboard</a>
+                <a href="saved.html" class="nav-link">Saved</a>
+                <a href="messages.html" class="nav-link">Messages</a>
+                <a href="profile.html" class="nav-link">Profile</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Search Header -->
+    <section class="search-header">
+        <div class="search-form">
+            <div class="search-bar">
+                <div class="search-input-container">
+                    <i class="fas fa-map-marker-alt search-input-icon"></i>
+                    <input type="text" id="locationSearch" class="search-input-main" placeholder="Search by city, area, or landmark">
+                </div>
+                <button class="filters-toggle" onclick="toggleFilters()">
+                    <i class="fas fa-filter"></i>
+                    <span>Filters</span>
+                </button>
+                <button class="btn btn-primary" onclick="searchProperties()">
+                    <i class="fas fa-search"></i>
+                    Search
+                </button>
+            </div>
+            
+            <div class="search-actions">
+                <div class="results-info">
+                    <span id="resultsTitle">Loading properties...</span>
+                </div>
+                <div class="sort-container">
+                    <label for="sortBy">Sort by:</label>
+                    <select id="sortBy" class="sort-select" onchange="sortResults()">
+                        <option value="relevance">Relevance</option>
+                        <option value="price_low">Price: Low to High</option>
+                        <option value="price_high">Price: High to Low</option>
+                        <option value="rating">Rating</option>
+                        <option value="distance">Distance</option>
+                    </select>
+                </div>
+            </div>
+            
+            <!-- Filters Container -->
+            <div class="filters-container" id="filtersContainer">
+                <div class="filters-grid">
+                    <div class="filter-group">
+                        <label for="propertyType">Property Type</label>
+                        <select id="propertyType" class="filter-select">
+                            <option value="">All Types</option>
+                            <option value="boys_pg">Boys PG</option>
+                            <option value="girls_pg">Girls PG</option>
+                            <option value="co_living">Co-living</option>
+                            <option value="hostel">Hostel</option>
+                            <option value="shared_apartment">Shared Apartment</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label for="genderPreference">Gender Preference</label>
+                        <select id="genderPreference" class="filter-select">
+                            <option value="">Any</option>
+                            <option value="boys_only">Boys Only</option>
+                            <option value="girls_only">Girls Only</option>
+                            <option value="co_living">Co-living</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label for="minRent">Min Rent (₹)</label>
+                        <input type="number" id="minRent" class="filter-select" placeholder="Min rent">
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label for="maxRent">Max Rent (₹)</label>
+                        <input type="number" id="maxRent" class="filter-select" placeholder="Max rent">
+                    </div>
+                </div>
+                
+                <div class="filter-group">
+                    <label>Amenities</label>
+                    <div class="amenities-grid">
+                        <div class="amenity-checkbox">
+                            <input type="checkbox" id="wifi" value="wifi">
+                            <label for="wifi">WiFi</label>
+                        </div>
+                        <div class="amenity-checkbox">
+                            <input type="checkbox" id="parking" value="parking">
+                            <label for="parking">Parking</label>
+                        </div>
+                        <div class="amenity-checkbox">
+                            <input type="checkbox" id="meals" value="meals">
+                            <label for="meals">Meals</label>
+                        </div>
+                        <div class="amenity-checkbox">
+                            <input type="checkbox" id="gym" value="gym">
+                            <label for="gym">Gym</label>
+                        </div>
+                        <div class="amenity-checkbox">
+                            <input type="checkbox" id="security" value="security">
+                            <label for="security">Security</label>
+                        </div>
+                        <div class="amenity-checkbox">
+                            <input type="checkbox" id="power_backup" value="power_backup">
+                            <label for="power_backup">Power Backup</label>
+                        </div>
+                        <div class="amenity-checkbox">
+                            <input type="checkbox" id="laundry" value="laundry">
+                            <label for="laundry">Laundry</label>
+                        </div>
+                        <div class="amenity-checkbox">
+                            <input type="checkbox" id="ac" value="ac">
+                            <label for="ac">AC</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="filter-actions">
+                    <button class="btn btn-outline" onclick="clearFilters()">Clear All</button>
+                    <button class="btn btn-primary" onclick="applyFilters()">Apply Filters</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Search Content -->
+    <section class="search-content">
+        <!-- Loading State -->
+        <div class="loading-state" id="loadingState" >
+            <div class="loading-content">
+                <div class="loading-spinner-large">
+                    <i class="fas fa-spinner fa-spin"></i>
+                </div>
+                <p>Searching for properties...</p>
+            </div>
+        </div>
+
+        <!-- Search Results -->
+        <div class="search-results" id="searchResults">
+            <div class="properties-grid" id="propertiesGrid">
+                <!-- Properties will be loaded dynamically -->
+            </div>
+        </div>
+
+        <!-- No Results -->
+        <div class="no-results" id="noResults" >
+            <i class="fas fa-search"></i>
+            <h3>No properties found</h3>
+            <p>Try adjusting your search criteria or filters to find more properties.</p>
+            <button class="btn btn-primary" onclick="clearFilters()">Clear Filters</button>
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination" id="pagination" 
+            <button class="page-btn" id="prevBtn" onclick="previousPage()">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <div class="page-numbers" id="pageNumbers">
+                <!-- Page numbers will be generated dynamically -->
+            </div>
+            <button class="page-btn" id="nextBtn" onclick="nextPage()" title="Next Page">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+    </section>
+
+    <script src="static/js/search.js"></script>
+</body>
+</html>
