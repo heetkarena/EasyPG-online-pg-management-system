@@ -396,20 +396,6 @@ The application includes pre-configured test accounts:
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 👥 Team
-
-- **Developer:** [Your Name]
-- **Guide:** [Professor Name]
-- **College:** [College Name]
-- **Course:** [Course Name]
-- **Academic Year:** 2024-2025
-
-## 📞 Support
-
-For support and queries:
-- Email: support@easypg.com
-- GitHub Issues: [Create an issue](https://github.com/yourusername/easypg/issues)
-
 ## 🎓 Academic Context
 
 This project was developed as part of the Web Development course curriculum, demonstrating:
@@ -436,4 +422,4 @@ This project was developed as part of the Web Development course curriculum, dem
 
 ---
 
-**Built with ❤️ for college project | EasyPG Team © 2024**
+**Built for college project | EasyPG Team © 2025**
