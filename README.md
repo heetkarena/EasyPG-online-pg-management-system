@@ -64,7 +64,7 @@ EasyPG is a full-stack web application built as a college project that simplifie
 
 1. **Clone the repository**
    \`\`\`bash
-   git clone https://github.com/yourusername/easypg.git
+   git clone https://github.com/heetkarena/EasyPG-online-pg-management-system.git
    cd easypg
    \`\`\`
 
