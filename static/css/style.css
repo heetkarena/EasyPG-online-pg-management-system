@@ -267,6 +267,7 @@ body {
   font-weight: 700;
   color: #1e293b;
   margin-bottom: 16px;
+  text-align: center;
 }
 
 .section-header p {
@@ -398,7 +399,7 @@ body {
   gap: 60px;
   align-items: center;
 }
-.section-header h2 {
+.section-header h2,p {
   align-items: center;
 }
 /* CTA Section */
