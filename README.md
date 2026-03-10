@@ -107,6 +107,41 @@ EasyPG is a full-stack web application built as a college project that simplifie
 7. **Access the application**
    Open your browser and navigate to `http://localhost:5000`
 
+---
+
+## 🐳 Docker Support
+
+A `Dockerfile` is included for containerizing the application. You can build and run the image locally or deploy it to a container platform.
+
+### Build the image
+
+```bash
+docker build -t easypg-app .
+```
+
+> **Note:** make sure your `.env` file is present and contains the required environment variables before starting the container. You can either copy it into the image during build (not recommended for secrets) or mount it at runtime.
+
+### Run the container
+
+```bash
+docker run --env-file .env -p 5000:5000 easypg-app
+```
+
+The container will start the Flask app on port `5000` by default.
+
+You can also use `docker-compose` if you prefer; here’s a minimal example in `docker-compose.yml`:
+
+```yaml
+version: '3.8'
+services:
+  web:
+    build: .
+    ports:
+      - "5000:5000"
+    env_file:
+      - .env
+```
+
 ## 📚 Project Structure
 
 \`\`\`
