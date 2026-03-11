@@ -29,4 +29,5 @@ EXPOSE 5000
 
 # Default command
 # We use the run.py entrypoint which handles DB creation and starts the server
-CMD ["python", "app.py"]
+# CMD ["python", "app.py"]
+CMD ["gunicorn", "--bind", "0.0.0.0:5000", "app:app"]
