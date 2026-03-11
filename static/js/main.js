@@ -232,7 +232,7 @@ function showNotification(message, type = "info") {
 }
 
 // API helper functions
-const API_BASE_URL = "https://easypg-online-pg-management-system.onrender.com/"
+const API_BASE_URL = "https://easypg-online-pg-management-system.onrender.com/api"
 
 // Make API request
 async function makeAPIRequest(endpoint, options = {}) {

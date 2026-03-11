@@ -467,7 +467,7 @@ function showNotification(message, type = "info") {
 
 // API helper function
 async function makeAPIRequest(endpoint, options = {}) {
-  const url = `https://easypg-online-pg-management-system.onrender.com/${endpoint}`
+  const url = `https://easypg-online-pg-management-system.onrender.com/api${endpoint}`
   const token = localStorage.getItem("authToken")
 
   const defaultOptions = {

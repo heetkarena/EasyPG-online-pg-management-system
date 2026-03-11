@@ -23,7 +23,7 @@ function showNotification(message, type = "info") {
 }
 
 async function makeAPIRequest(endpoint, options = {}) {
-  const url = `https://easypg-online-pg-management-system.onrender.com/${endpoint}`
+  const url = `https://easypg-online-pg-management-system.onrender.com/api${endpoint}`
 
   const defaultOptions = {
     headers: {
