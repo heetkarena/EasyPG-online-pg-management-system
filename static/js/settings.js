@@ -154,7 +154,7 @@ function deleteAccount() {
             
             // In a real application, this would make an API call to delete the account
             setTimeout(() => {
-                window.location.href = 'index.html';
+                window.location.href = '/';
             }, 3000);
         }
     } else if (confirmation !== null) {

@@ -33,7 +33,7 @@ function initializeSearchPage() {
 function checkAuthStatus() {
   const token = localStorage.getItem("authToken")
   if (!token) {
-    window.location.href = "login.html"
+    window.location.href = "/login"
     return
   }
 }
@@ -43,7 +43,7 @@ async function loadProperties() {
   try {
     setLoadingState(true)
 
-    const response = await makeAPIRequest("/properties")
+    const response = await makeAPIRequest("/search?page=1&per_page=12")
     properties = response.properties || []
 
     displayProperties(properties)
@@ -90,7 +90,7 @@ async function searchProperties() {
     params.append("page", currentPage)
     params.append("per_page", 12)
 
-    const response = await makeAPIRequest(`/properties?${params.toString()}`)
+    const response = await makeAPIRequest(`/search?${params.toString()}`)
     properties = response.properties || []
 
     displayProperties(properties)
@@ -443,11 +443,11 @@ function toggleSave(propertyId, button) {
 }
 
 function viewProperty(propertyId) {
-  window.location.href = `property.html?id=${propertyId}`
+  window.location.href = "/search"
 }
 
 function contactOwner(propertyId) {
-  window.location.href = `messages.html?property=${propertyId}`
+  window.location.href = `/messages?property=${propertyId}`
 }
 
 // Show notification

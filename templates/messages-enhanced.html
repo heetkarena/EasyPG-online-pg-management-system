@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Messages - EasyPG</title>
+    <link rel="stylesheet" href="static/css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="dashboard-page">
+    <!-- Sidebar (same as dashboard) -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-brand">
+                <i class="fas fa-home"></i>
+                <span>EasyPG</span>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="/dashboard" class="nav-item">
+                <i class="fas fa-tachometer-alt"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="/search" class="nav-item">
+                <i class="fas fa-search"></i>
+                <span>Search PGs</span>
+            </a>
+            <a href="/saved" class="nav-item">
+                <i class="fas fa-heart"></i>
+                <span>Saved PGs</span>
+            </a>
+            <a href="/messages" class="nav-item active">
+                <i class="fas fa-comments"></i>
+                <span>Messages</span>
+                <span class="badge" id="messageCount">0</span>
+            </a>
+            <a href="/payments" class="nav-item">
+                <i class="fas fa-credit-card"></i>
+                <span>Payments</span>
+            </a>
+            <a href="/profile" class="nav-item">
+                <i class="fas fa-user"></i>
+                <span>Profile</span>
+            </a>
+            <a href="/settings" class="nav-item">
+                <i class="fas fa-cog"></i>
+                <span>Settings</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="user-info">
+                <div class="user-avatar" id="sidebarInitials">U</div>
+                <div class="user-details">
+                    <span class="user-name" id="profileName">User</span>
+                    <span class="user-role" id="profileRole">Student</span>
+                </div>
+            </div>
+            <button type="button" class="logout-btn" onclick="signOut()" title="Sign out">
+                <i class="fas fa-sign-out-alt"></i>
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Header -->
+        <header class="dashboard-header">
+            <div class="header-left">
+                <button type="button" class="sidebar-toggle" onclick="toggleSidebar()">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="welcome-text">
+                    <h1>Messages</h1>
+                    <p>Chat with property owners and students</p>
+                </div>
+            </div>
+        </header>
+
+        <!-- Messages Container -->
+        <div class="messages-container">
+            <!-- Conversations List -->
+            <aside class="conversations-sidebar">
+                <div class="conversations-header">
+                    <h2>Conversations</h2>
+                    <input type="text" class="search-conversations" placeholder="Search conversations..." />
+                </div>
+
+                <div class="conversation-list">
+                    <!-- Conversations will be populated here by JavaScript -->
+                </div>
+            </aside>
+
+            <!-- Chat Area -->
+            <section class="chat-area">
+                <div class="messages-header">
+                    <!-- User info will be populated here -->
+                </div>
+
+                <div class="messages-list">
+                    <!-- Messages will be populated here -->
+                </div>
+
+                <div class="message-input-area">
+                    <form class="message-form" onsubmit="sendMessage(event)">
+                        <input type="text" class="message-input" placeholder="Type a message..." />
+                        <button type="submit" class="send-message-btn">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Include API utilities and scripts -->
+    <script src="/static/js/api.js"></script>
+    <script src="/static/js/main.js"></script>
+    <script src="/static/js/messages.js"></script>
+</body>
+</html>

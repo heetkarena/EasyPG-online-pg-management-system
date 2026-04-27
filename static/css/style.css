@@ -37,6 +37,8 @@ body {
   justify-content: space-between;
   align-items: center;
   height: 70px;
+  /* make dropdown absolute positioning relative to this container */
+  position: relative;
 }
 
 .nav-brand {
@@ -815,9 +817,16 @@ body {
 
 /* Dashboard Styles */
 .dashboard-page {
-  display: flex;
   min-height: 100vh;
   background: #f8fafc;
+}
+
+.dashboard-page .navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
 }
 
 .sidebar {
@@ -1267,6 +1276,289 @@ body {
   font-size: 1.1rem;
   font-weight: 700;
   color: #1e293b;
+}
+
+/* Page container + utility styles */
+.dashboard-page .saved-container,
+.dashboard-page .payments-container,
+.dashboard-page .profile-container,
+body.dashboard-page.search-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 120px 20px 40px;
+}
+
+.dashboard-page .navbar + .saved-container,
+.dashboard-page .navbar + .payments-container,
+.dashboard-page .navbar + .profile-container,
+.dashboard-page .navbar + .messages-container,
+body.dashboard-page.search-page {
+  padding-top: 120px;
+}
+
+.dashboard-page .saved-header,
+.dashboard-page .payments-header,
+.dashboard-page .profile-header,
+.dashboard-page .messages-header,
+.dashboard-page .section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.dashboard-page .saved-content,
+.dashboard-page .payment-summary,
+.dashboard-page .payment-methods,
+.dashboard-page .messages-sidebar,
+.dashboard-page .messages-main,
+.dashboard-page .profile-content {
+  background: white;
+  border-radius: 24px;
+  box-shadow: 0 15px 35px rgba(15, 23, 42, 0.08);
+  padding: 24px;
+}
+
+.dashboard-page .saved-stats,
+.dashboard-page .stats-grid,
+.dashboard-page .profile-content .stats-grid,
+.dashboard-page .payment-summary .summary-card,
+.dashboard-page .profile-content .info-grid,
+.dashboard-page .profile-content .settings-list {
+  display: grid;
+  gap: 20px;
+}
+
+.dashboard-page .messages-container {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 24px;
+  align-items: stretch;
+}
+
+.dashboard-page.messages-page .messages-container,
+.dashboard-page.messages-page .conversations-sidebar,
+.dashboard-page.messages-page .chat-area {
+  padding-top: 0;
+}
+
+.dashboard-page .saved-stats {
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  margin-bottom: 30px;
+}
+
+.dashboard-page .saved-properties {
+  display: grid;
+  gap: 20px;
+}
+
+.dashboard-page .empty-state {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.dashboard-page .search-page {
+  padding-top: 100px;
+}
+
+.dashboard-page .messages-container {
+  grid-template-columns: 320px minmax(0, 1fr);
+  gap: 24px;
+}
+
+.dashboard-page .messages-sidebar,
+.dashboard-page .conversations-sidebar {
+  padding: 24px;
+  background: white;
+  border-radius: 24px;
+  box-shadow: 0 15px 35px rgba(15, 23, 42, 0.08);
+}
+
+.dashboard-page .messages-main,
+.dashboard-page .chat-area {
+  padding: 24px;
+  background: white;
+  border-radius: 24px;
+  box-shadow: 0 15px 35px rgba(15, 23, 42, 0.08);
+}
+
+.dashboard-page .conversations-sidebar {
+  max-width: 380px;
+}
+
+.dashboard-page .chat-area {
+  display: flex;
+  flex-direction: column;
+  min-height: 500px;
+}
+
+.dashboard-page .messages-header,
+.dashboard-page .payment-tabs,
+.dashboard-page .profile-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.dashboard-page .payment-tabs {
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+
+.dashboard-page .tab-content {
+  display: none;
+}
+
+.dashboard-page .tab-content.active {
+  display: block;
+}
+
+.dashboard-page .tab-btn {
+  padding: 12px 18px;
+}
+
+.dashboard-page .summary-card {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 24px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.dashboard-page .summary-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px;
+  border-radius: 20px;
+  background: #f8fafc;
+}
+
+.dashboard-page .summary-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 16px;
+  display: grid;
+  place-items: center;
+  background: #eff6ff;
+  color: #3b82f6;
+  font-size: 1.2rem;
+}
+
+.dashboard-page .profile-header {
+  padding: 24px;
+}
+
+.dashboard-page .profile-avatar-large {
+  width: 96px;
+  height: 96px;
+  border-radius: 24px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  color: white;
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.dashboard-page .profile-info {
+  flex: 1;
+  min-width: 220px;
+}
+
+.dashboard-page .profile-content .profile-section {
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.dashboard-page .profile-content .info-grid {
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.dashboard-page .profile-content .settings-list {
+  grid-template-columns: 1fr;
+}
+
+.dashboard-page .setting-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 0;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.dashboard-page .setting-item:last-child {
+  border-bottom: none;
+}
+
+.dashboard-page .btn-sm {
+  padding: 10px 16px;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 980px) {
+  .dashboard-page .messages-container,
+  .dashboard-page .payment-summary .summary-card,
+  .dashboard-page .saved-stats,
+  .dashboard-page .profile-content .stats-grid,
+  .dashboard-page .profile-content .info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-page .nav-container {
+    flex-wrap: wrap;
+  }
+
+  .dashboard-page .navbar .nav-menu {
+    display: none;
+  }
+
+  .dashboard-page .nav-menu.active {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 70px;
+    left: 0;
+    right: 0;
+    background: white;
+    padding: 20px;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.12);
+  }
+
+  .dashboard-page .nav-toggle {
+    display: block;
+  }
+
+  .dashboard-page .dashboard-content,
+  .dashboard-page .saved-container,
+  .dashboard-page .payments-container,
+  .dashboard-page .profile-container,
+  .dashboard-page .search-page {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}
+
+@media (max-width: 640px) {
+  .dashboard-page {
+    padding-top: 100px;
+  }
+
+  .dashboard-page .dashboard-header,
+  .dashboard-page .profile-header,
+  .dashboard-page .conversation-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .dashboard-page .header-right {
+    width: 100%;
+    justify-content: flex-start;
+  }
 }
 
 .activity-section {

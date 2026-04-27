@@ -411,16 +411,16 @@ function loadQuickActions() {
   const actions =
     userType === "student"
       ? [
-          { icon: "fas fa-search", label: "Search New PGs", color: "#3b82f6", href: "search.html" },
-          { icon: "fas fa-calendar", label: "Schedule Visit", color: "#10b981", href: "visits.html" },
-          { icon: "fas fa-comments", label: "Contact Owner", color: "#8b5cf6", href: "messages.html" },
-          { icon: "fas fa-credit-card", label: "Make Payment", color: "#f59e0b", href: "payments.html" },
+          { icon: "fas fa-search", label: "Search New PGs", color: "#3b82f6", href: "/search" },
+          { icon: "fas fa-calendar", label: "Schedule Visit", color: "#10b981", href: "/search" },
+          { icon: "fas fa-comments", label: "Contact Owner", color: "#8b5cf6", href: "/messages" },
+          { icon: "fas fa-credit-card", label: "Make Payment", color: "#f59e0b", href: "/payments" },
         ]
       : [
-          { icon: "fas fa-plus", label: "Add Property", color: "#3b82f6", href: "list-property.html" },
-          { icon: "fas fa-users", label: "Manage Tenants", color: "#10b981", href: "tenants.html" },
-          { icon: "fas fa-comments", label: "View Inquiries", color: "#8b5cf6", href: "messages.html" },
-          { icon: "fas fa-chart-line", label: "View Analytics", color: "#f59e0b", href: "analytics.html" },
+          { icon: "fas fa-plus", label: "Add Property", color: "#3b82f6", href: "/list-property" },
+          { icon: "fas fa-users", label: "Manage Tenants", color: "#10b981", href: "/messages" },
+          { icon: "fas fa-comments", label: "View Inquiries", color: "#8b5cf6", href: "/messages" },
+          { icon: "fas fa-chart-line", label: "View Analytics", color: "#f59e0b", href: "/dashboard" },
         ]
 
   quickActions.innerHTML = ""

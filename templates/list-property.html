@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>List Property - EasyPG</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="list-property-page">
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <a href="/">
+                    <i class="fas fa-home"></i>
+                    <span>EasyPG</span>
+                </a>
+            </div>
+            <div class="nav-menu">
+                <a href="/dashboard" class="nav-link">Dashboard</a>
+                <a href="/search" class="nav-link">Search</a>
+                <a href="/messages" class="nav-link">Messages</a>
+                <a href="/profile" class="nav-link">Profile</a>
+            </div>
+            <div class="nav-toggle" onclick="toggleMobileMenu()">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <section class="section-header">
+            <h1>List a New Property</h1>
+            <p>Create a detailed listing to submit for approval. Fill all required fields and upload images.</p>
+        </section>
+
+        <section class="property-form-section">
+            <form class="property-form card" id="propertyForm" onsubmit="createProperty(event)">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="propertyName">Property Name *</label>
+                        <input type="text" id="propertyName" class="form-control" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="propertyType">Property Type *</label>
+                        <select id="propertyType" class="form-control" required>
+                            <option value="">Select Type</option>
+                            <option value="boys_pg">Boys PG</option>
+                            <option value="girls_pg">Girls PG</option>
+                            <option value="co_living">Co-living</option>
+                            <option value="hostel">Hostel</option>
+                            <option value="shared_apartment">Shared Apartment</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="address">Address *</label>
+                        <input type="text" id="address" class="form-control" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="city">City *</label>
+                        <input type="text" id="city" class="form-control" required />
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="state">State</label>
+                        <input type="text" id="state" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label for="pincode">Pincode</label>
+                        <input type="text" id="pincode" class="form-control" />
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="rentPerMonth">Rent per Month (₹) *</label>
+                        <input type="number" id="rentPerMonth" class="form-control" required min="0" />
+                    </div>
+                    <div class="form-group">
+                        <label for="securityDeposit">Security Deposit (₹)</label>
+                        <input type="number" id="securityDeposit" class="form-control" min="0" />
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="totalRooms">Total Rooms *</label>
+                        <input type="number" id="totalRooms" class="form-control" required min="1" />
+                    </div>
+                    <div class="form-group">
+                        <label for="availableRooms">Available Rooms *</label>
+                        <input type="number" id="availableRooms" class="form-control" required min="0" />
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="genderPreference">Gender Preference</label>
+                        <select id="genderPreference" class="form-control">
+                            <option value="">Any</option>
+                            <option value="boys_only">Boys Only</option>
+                            <option value="girls_only">Girls Only</option>
+                            <option value="co_living">Co-living</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="amenities">Amenities</label>
+                        <div class="amenities-grid">
+                            <label><input type="checkbox" value="wifi" class="amenity-checkbox"> WiFi</label>
+                            <label><input type="checkbox" value="parking" class="amenity-checkbox"> Parking</label>
+                            <label><input type="checkbox" value="meals" class="amenity-checkbox"> Meals</label>
+                            <label><input type="checkbox" value="gym" class="amenity-checkbox"> Gym</label>
+                            <label><input type="checkbox" value="laundry" class="amenity-checkbox"> Laundry</label>
+                            <label><input type="checkbox" value="ac" class="amenity-checkbox"> AC</label>
+                            <label><input type="checkbox" value="power_backup" class="amenity-checkbox"> Power Backup</label>
+                            <label><input type="checkbox" value="security" class="amenity-checkbox"> Security</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea id="description" class="form-control" rows="4" placeholder="Describe the property, rules, nearby landmarks, etc."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="images">Property Images</label>
+                    <input type="file" id="images" class="form-control" accept="image/*" multiple />
+                    <div id="imagePreview" class="image-preview"></div>
+                    <small class="text-muted">Upload multiple images. Files will be uploaded when submitting the form.</small>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Submit for Approval</button>
+                    <a href="/dashboard" class="btn btn-outline">Cancel</a>
+                </div>
+            </form>
+        </section>
+    </main>
+
+    <!-- Required scripts per Template Enhancement Guide -->
+    <script src="/static/js/api.js"></script>
+    <script src="/static/js/main.js"></script>
+
+    <!-- Small page-specific helper for image preview -->
+    <script>
+        document.getElementById('images').addEventListener('change', function (e) {
+            const preview = document.getElementById('imagePreview');
+            preview.innerHTML = '';
+            Array.from(e.target.files).slice(0, 6).forEach(file => {
+                const reader = new FileReader();
+                const wrap = document.createElement('div');
+                wrap.className = 'thumb';
+                reader.onload = function (ev) {
+                    const img = document.createElement('img');
+                    img.src = ev.target.result;
+                    img.alt = file.name;
+                    wrap.appendChild(img);
+                };
+                reader.readAsDataURL(file);
+                preview.appendChild(wrap);
+            });
+        });
+
+        // Hook for createProperty - if api.js provides it, this will defer to that.
+        async function createProperty(e) {
+            e.preventDefault();
+            if (typeof window.createProperty === 'function' && window.createProperty !== createProperty) {
+                // If api/main provide a createProperty implementation, call it
+                return window.createProperty(e);
+            }
+
+            // Fallback: gather form data and POST to /api/properties
+            const files = document.getElementById('images').files;
+            const formData = new FormData();
+            formData.append('property_name', document.getElementById('propertyName').value);
+            formData.append('property_type', document.getElementById('propertyType').value);
+            formData.append('address', document.getElementById('address').value);
+            formData.append('city', document.getElementById('city').value);
+            formData.append('state', document.getElementById('state').value);
+            formData.append('pincode', document.getElementById('pincode').value);
+            formData.append('rent_per_month', document.getElementById('rentPerMonth').value);
+            formData.append('security_deposit', document.getElementById('securityDeposit').value);
+            formData.append('total_rooms', document.getElementById('totalRooms').value);
+            formData.append('available_rooms', document.getElementById('availableRooms').value);
+            formData.append('gender_preference', document.getElementById('genderPreference').value);
+            formData.append('description', document.getElementById('description').value);
+
+            const amenities = Array.from(document.querySelectorAll('.amenity-checkbox:checked')).map(i => i.value);
+            formData.append('amenities', JSON.stringify(amenities));
+
+            Array.from(files).forEach((f, idx) => formData.append('images', f));
+
+            try {
+                const resp = await fetch('/api/properties', {
+                    method: 'POST',
+                    body: formData,
+                    credentials: 'include'
+                });
+                const data = await resp.json();
+                if (resp.ok) {
+                    alert('Property submitted successfully. It will be reviewed by admins.');
+                    window.location.href = '/dashboard';
+                } else {
+                    alert(data.message || 'Failed to submit property');
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Error submitting property. See console for details.');
+            }
+        }
+    </script>
+
+    <script src="/static/js/dashboard.js" defer></script>
+</body>
+</html>

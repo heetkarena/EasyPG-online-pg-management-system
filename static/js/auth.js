@@ -404,7 +404,7 @@ async function handleSignup(data) {
 function redirectAfterAuth(user) {
   switch (user.user_type) {
     case "admin":
-      window.location.href = "admin-dashboard.html"
+      window.location.href = "/dashboard"
       break
     case "owner":
       window.location.href = "/dashboard?type=owner"

@@ -85,6 +85,160 @@ def jwt_required(f):
     
     return decorated_function
 
+# Fake search data for local route simulation
+FAKE_PROPERTIES = [
+    {
+        'id': 'pg-101',
+        'property_name': 'Cozy Stay PG',
+        'property_type': 'boys_pg',
+        'city': 'Mumbai',
+        'state': 'Maharashtra',
+        'address': 'Andheri West, Mumbai',
+        'rent_per_month': 8500,
+        'security_deposit': 15000,
+        'available_rooms': 4,
+        'total_rooms': 8,
+        'gender_preference': 'boys_only',
+        'amenities': ['wifi', 'meals', 'security', 'ac'],
+        'images': [
+            {'image_url': 'https://images.unsplash.com/photo-1560185127-6d0fcf0e6a16?auto=format&fit=crop&w=900&q=80'},
+        ],
+        'owner': {'name': 'Rohan Sharma', 'phone': '9876543210', 'email': 'rohan@example.com'},
+        'created_at': '2024-01-15T10:00:00Z'
+    },
+    {
+        'id': 'pg-102',
+        'property_name': 'Sunrise Girls Hostel',
+        'property_type': 'girls_pg',
+        'city': 'Bangalore',
+        'state': 'Karnataka',
+        'address': 'Koramangala, Bangalore',
+        'rent_per_month': 9500,
+        'security_deposit': 18000,
+        'available_rooms': 5,
+        'total_rooms': 10,
+        'gender_preference': 'girls_only',
+        'amenities': ['wifi', 'laundry', 'security', 'meals'],
+        'images': [
+            {'image_url': 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=900&q=80'},
+        ],
+        'owner': {'name': 'Priya Patel', 'phone': '9123456780', 'email': 'priya@example.com'},
+        'created_at': '2024-02-20T12:30:00Z'
+    },
+    {
+        'id': 'pg-103',
+        'property_name': 'City Central Co-Living',
+        'property_type': 'co_living',
+        'city': 'Pune',
+        'state': 'Maharashtra',
+        'address': 'Koregaon Park, Pune',
+        'rent_per_month': 12000,
+        'security_deposit': 20000,
+        'available_rooms': 3,
+        'total_rooms': 6,
+        'gender_preference': 'co_living',
+        'amenities': ['wifi', 'gym', 'parking', 'power_backup'],
+        'images': [
+            {'image_url': 'https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=900&q=80'},
+        ],
+        'owner': {'name': 'Amit Verma', 'phone': '9012345678', 'email': 'amit@example.com'},
+        'created_at': '2024-03-05T09:10:00Z'
+    },
+    {
+        'id': 'pg-104',
+        'property_name': 'Green Valley Hostel',
+        'property_type': 'hostel',
+        'city': 'Chennai',
+        'state': 'Tamil Nadu',
+        'address': 'Adyar, Chennai',
+        'rent_per_month': 7800,
+        'security_deposit': 14000,
+        'available_rooms': 6,
+        'total_rooms': 12,
+        'gender_preference': 'co_living',
+        'amenities': ['wifi', 'meals', 'security', 'laundry'],
+        'images': [
+            {'image_url': 'https://images.unsplash.com/photo-1493809842364-78817add7ffb?auto=format&fit=crop&w=900&q=80'},
+        ],
+        'owner': {'name': 'Swathi Rao', 'phone': '9988776655', 'email': 'swathi@example.com'},
+        'created_at': '2024-04-12T14:45:00Z'
+    },
+]
+
+
+def filter_fake_properties(properties, city=None, property_type=None, gender_preference=None, min_rent=None, max_rent=None, amenities=None):
+    filtered = []
+    amenities = amenities or []
+
+    for prop in properties:
+        if city:
+            query = city.strip().lower()
+            if query not in prop['city'].lower() and query not in prop['property_name'].lower() and query not in prop['address'].lower():
+                continue
+
+        if property_type and prop['property_type'] != property_type:
+            continue
+
+        if gender_preference and prop['gender_preference'] != gender_preference:
+            continue
+
+        if min_rent is not None and prop['rent_per_month'] < min_rent:
+            continue
+
+        if max_rent is not None and prop['rent_per_month'] > max_rent:
+            continue
+
+        if amenities:
+            if not all(item in prop['amenities'] for item in amenities):
+                continue
+
+        filtered.append(prop)
+
+    return filtered
+
+
+@app.route('/api/search', methods=['GET'])
+def api_search_properties():
+    try:
+        city = request.args.get('city')
+        property_type = request.args.get('property_type')
+        gender_preference = request.args.get('gender_preference')
+        min_rent = request.args.get('min_rent', type=int)
+        max_rent = request.args.get('max_rent', type=int)
+        amenities = request.args.getlist('amenities')
+        page = request.args.get('page', 1, type=int)
+        per_page = request.args.get('per_page', 12, type=int)
+
+        results = filter_fake_properties(
+            FAKE_PROPERTIES,
+            city=city,
+            property_type=property_type,
+            gender_preference=gender_preference,
+            min_rent=min_rent,
+            max_rent=max_rent,
+            amenities=amenities,
+        )
+
+        total = len(results)
+        start = (page - 1) * per_page
+        end = start + per_page
+        paginated_results = results[start:end]
+
+        return jsonify({
+            'properties': paginated_results,
+            'pagination': {
+                'page': page,
+                'pages': (total + per_page - 1) // per_page,
+                'per_page': per_page,
+                'total': total,
+                'has_next': end < total,
+                'has_prev': page > 1,
+            }
+        }), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
 # Routes - Static Pages
 @app.route('/')
 def index():
@@ -121,6 +275,10 @@ def settings_page():
 @app.route('/saved')
 def saved_page():
     return render_template('saved.html')
+
+@app.route('/list-property')
+def list_property_page():
+    return render_template('list-property.html')
 
 # API Routes - Authentication
 @app.route('/api/auth/register', methods=['POST'])
@@ -270,13 +428,576 @@ def logout():
     # In a real application, you might want to blacklist the token
     return jsonify({'message': 'Logged out successfully'}), 200
 
-# API Routes - Search 
-# @app.route('api/search', methods=['GET'])
-# def search():
-#     try:
-#         pass
-#     except Exception as e:
-#         pass
+# API Routes - Saved Properties
+@app.route('/api/saved-properties', methods=['GET'])
+@jwt_required
+def get_saved_properties():
+    try:
+        user_id = request.current_user_id
+
+        # Get saved properties for the user
+        result = supabase.table('saved_properties').select('*, properties(*, users!properties_owner_id_fkey(full_name, phone, email), property_images(*))').eq('student_id', user_id).execute()
+
+        property_list = []
+        if result.data:
+            for saved in result.data:
+                prop = saved['properties']
+
+                # Process images
+                images = []
+                if prop.get('property_images'):
+                    images = [{'image_url': img['image_url'], 'image_order': img['image_order']} for img in prop['property_images']]
+
+                # Process amenities
+                amenities = []
+                if prop.get('amenities'):
+                    amenities = prop['amenities'].split(',') if isinstance(prop['amenities'], str) else prop['amenities']
+
+                # Get owner info
+                owner_info = {'name': 'Unknown', 'phone': '', 'email': ''}
+                if prop.get('users'):
+                    owner_info = {
+                        'name': prop['users']['full_name'],
+                        'phone': prop['users']['phone'],
+                        'email': prop['users']['email']
+                    }
+
+                property_list.append({
+                    'id': prop['id'],
+                    'property_name': prop['property_name'],
+                    'city': prop['city'],
+                    'rent_per_month': prop['rent_per_month'],
+                    'rating': 4.5,
+                    'images': images,
+                    'owner': owner_info,
+                    'saved_at': saved['created_at']
+                })
+
+        return jsonify({'properties': property_list}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/saved-properties', methods=['POST'])
+@jwt_required
+def save_property():
+    try:
+        user_id = request.current_user_id
+        data = request.get_json()
+
+        if not data.get('property_id'):
+            return jsonify({'error': 'property_id is required'}), 400
+
+        # Check if already saved
+        existing = supabase.table('saved_properties').select('*').eq('student_id', user_id).eq('property_id', data['property_id']).execute()
+
+        if existing.data:
+            return jsonify({'error': 'Property already saved'}), 400
+
+        saved_data = {
+            'id': str(uuid.uuid4()),
+            'student_id': user_id,
+            'property_id': data['property_id'],
+            'created_at': datetime.utcnow().isoformat()
+        }
+
+        result = supabase.table('saved_properties').insert(saved_data).execute()
+
+        if result.data:
+            return jsonify({'message': 'Property saved successfully'}), 201
+        else:
+            return jsonify({'error': 'Failed to save property'}), 500
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/saved-properties/<property_id>', methods=['DELETE'])
+@jwt_required
+def remove_saved_property(property_id):
+    try:
+        user_id = request.current_user_id
+
+        # Delete saved property
+        result = supabase.table('saved_properties').delete().eq('student_id', user_id).eq('property_id', property_id).execute()
+
+        return jsonify({'message': 'Property removed from saved'}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+# API Routes - Messages
+@app.route('/api/messages', methods=['GET'])
+@jwt_required
+def get_messages():
+    try:
+        user_id = request.current_user_id
+
+        # Get conversations for the user
+        result = supabase.table('messages').select('*, sender:sender_id(id, full_name, email), receiver:receiver_id(id, full_name, email)').or_(f'sender_id.eq.{user_id},receiver_id.eq.{user_id}').order('created_at', desc=True).execute()
+
+        conversations = []
+        seen_conversations = set()
+
+        if result.data:
+            for msg in result.data:
+                other_user = msg['receiver'] if msg['sender_id'] == user_id else msg['sender']
+                conv_key = tuple(sorted([user_id, other_user['id']]))
+
+                if conv_key not in seen_conversations:
+                    seen_conversations.add(conv_key)
+                    conversations.append({
+                        'user_id': other_user['id'],
+                        'user_name': other_user['full_name'],
+                        'user_email': other_user['email'],
+                        'last_message': msg['message'],
+                        'last_message_at': msg['created_at'],
+                        'unread': not msg['is_read'] and msg['receiver_id'] == user_id
+                    })
+
+        return jsonify({'conversations': conversations}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/messages', methods=['POST'])
+@jwt_required
+def send_message():
+    try:
+        user_id = request.current_user_id
+        data = request.get_json()
+
+        required_fields = ['receiver_id', 'message']
+        for field in required_fields:
+            if not data.get(field):
+                return jsonify({'error': f'{field} is required'}), 400
+
+        message_data = {
+            'id': str(uuid.uuid4()),
+            'sender_id': user_id,
+            'receiver_id': data['receiver_id'],
+            'message': data['message'],
+            'is_read': False,
+            'created_at': datetime.utcnow().isoformat()
+        }
+
+        result = supabase.table('messages').insert(message_data).execute()
+
+        if result.data:
+            return jsonify({'message': 'Message sent successfully'}), 201
+        else:
+            return jsonify({'error': 'Failed to send message'}), 500
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/messages/<user_id>', methods=['GET'])
+@jwt_required
+def get_conversation(user_id):
+    try:
+        current_user_id = request.current_user_id
+
+        # Get all messages between two users
+        result = supabase.table('messages').select('*').or_(f'sender_id.eq.{current_user_id},receiver_id.eq.{current_user_id}').or_(f'sender_id.eq.{user_id},receiver_id.eq.{user_id}').order('created_at', asc=True).execute()
+
+        messages = []
+        if result.data:
+            for msg in result.data:
+                if (msg['sender_id'] == current_user_id and msg['receiver_id'] == user_id) or (msg['sender_id'] == user_id and msg['receiver_id'] == current_user_id):
+                    messages.append({
+                        'id': msg['id'],
+                        'sender_id': msg['sender_id'],
+                        'receiver_id': msg['receiver_id'],
+                        'message': msg['message'],
+                        'is_read': msg['is_read'],
+                        'created_at': msg['created_at']
+                    })
+
+        return jsonify({'messages': messages}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+# API Routes - Bookings
+@app.route('/api/bookings', methods=['GET'])
+@jwt_required
+def get_bookings():
+    try:
+        user_id = request.current_user_id
+
+        # Get user type
+        user_result = supabase.table('users').select('*').eq('id', user_id).execute()
+        if not user_result.data:
+            return jsonify({'error': 'User not found'}), 404
+
+        user = user_result.data[0]
+
+        if user['user_type'] == 'student':
+            result = supabase.table('bookings').select('*, properties(property_name, city, rent_per_month)').eq('student_id', user_id).execute()
+        else:
+            result = supabase.table('bookings').select('*, properties(property_name, city, rent_per_month), users!bookings_student_id_fkey(full_name, phone)').eq('properties.owner_id', user_id).execute()
+
+        bookings_list = []
+        if result.data:
+            for booking in result.data:
+                bookings_list.append({
+                    'id': booking['id'],
+                    'property_name': booking['properties']['property_name'],
+                    'city': booking['properties']['city'],
+                    'monthly_rent': booking['monthly_rent'],
+                    'total_amount': booking['total_amount'],
+                    'check_in_date': booking['check_in_date'],
+                    'check_out_date': booking['check_out_date'],
+                    'status': booking['status'],
+                    'created_at': booking['created_at']
+                })
+
+        return jsonify({'bookings': bookings_list}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/bookings', methods=['POST'])
+@jwt_required
+def create_booking():
+    try:
+        user_id = request.current_user_id
+        data = request.get_json()
+
+        required_fields = ['property_id', 'check_in_date', 'check_out_date', 'monthly_rent']
+        for field in required_fields:
+            if not data.get(field):
+                return jsonify({'error': f'{field} is required'}), 400
+
+        booking_data = {
+            'id': str(uuid.uuid4()),
+            'property_id': data['property_id'],
+            'student_id': user_id,
+            'check_in_date': data['check_in_date'],
+            'check_out_date': data['check_out_date'],
+            'monthly_rent': data['monthly_rent'],
+            'total_amount': data.get('total_amount', 0),
+            'status': 'pending',
+            'created_at': datetime.utcnow().isoformat(),
+            'updated_at': datetime.utcnow().isoformat()
+        }
+
+        result = supabase.table('bookings').insert(booking_data).execute()
+
+        if result.data:
+            return jsonify({'message': 'Booking created successfully', 'booking': {'id': result.data[0]['id']}}), 201
+        else:
+            return jsonify({'error': 'Failed to create booking'}), 500
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/bookings/<booking_id>', methods=['PUT'])
+@jwt_required
+def update_booking(booking_id):
+    try:
+        user_id = request.current_user_id
+        data = request.get_json()
+
+        if not data.get('status'):
+            return jsonify({'error': 'status is required'}), 400
+
+        # Get booking
+        booking_result = supabase.table('bookings').select('*').eq('id', booking_id).execute()
+        if not booking_result.data:
+            return jsonify({'error': 'Booking not found'}), 404
+
+        booking = booking_result.data[0]
+
+        # Check authorization
+        property_result = supabase.table('properties').select('*').eq('id', booking['property_id']).execute()
+        if property_result.data and property_result.data[0]['owner_id'] != user_id and booking['student_id'] != user_id:
+            return jsonify({'error': 'Unauthorized'}), 403
+
+        update_data = {
+            'status': data['status'],
+            'updated_at': datetime.utcnow().isoformat()
+        }
+
+        result = supabase.table('bookings').update(update_data).eq('id', booking_id).execute()
+
+        if result.data:
+            return jsonify({'message': 'Booking updated successfully'}), 200
+        else:
+            return jsonify({'error': 'Failed to update booking'}), 500
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+# API Routes - Reviews
+@app.route('/api/reviews', methods=['POST'])
+@jwt_required
+def create_review():
+    try:
+        user_id = request.current_user_id
+        data = request.get_json()
+
+        required_fields = ['property_id', 'rating', 'review_title', 'review_text']
+        for field in required_fields:
+            if not data.get(field):
+                return jsonify({'error': f'{field} is required'}), 400
+
+        if not 1 <= data['rating'] <= 5:
+            return jsonify({'error': 'Rating must be between 1 and 5'}), 400
+
+        review_data = {
+            'id': str(uuid.uuid4()),
+            'property_id': data['property_id'],
+            'student_id': user_id,
+            'rating': data['rating'],
+            'review_title': data['review_title'],
+            'review_text': data['review_text'],
+            'created_at': datetime.utcnow().isoformat(),
+            'updated_at': datetime.utcnow().isoformat()
+        }
+
+        result = supabase.table('reviews').insert(review_data).execute()
+
+        if result.data:
+            return jsonify({'message': 'Review posted successfully'}), 201
+        else:
+            return jsonify({'error': 'Failed to post review'}), 500
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/properties/<property_id>/reviews', methods=['GET'])
+def get_property_reviews(property_id):
+    try:
+        result = supabase.table('reviews').select('*, users!reviews_student_id_fkey(full_name)').eq('property_id', property_id).order('created_at', desc=True).execute()
+
+        reviews_list = []
+        if result.data:
+            for review in result.data:
+                reviews_list.append({
+                    'id': review['id'],
+                    'rating': review['rating'],
+                    'review_title': review['review_title'],
+                    'review_text': review['review_text'],
+                    'student_name': review['users']['full_name'] if review.get('users') else 'Anonymous',
+                    'created_at': review['created_at']
+                })
+
+        return jsonify({'reviews': reviews_list}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+# API Routes - User Profile
+@app.route('/api/profile', methods=['GET'])
+@jwt_required
+def get_profile():
+    try:
+        user_id = request.current_user_id
+
+        result = supabase.table('users').select('*').eq('id', user_id).execute()
+
+        if not result.data:
+            return jsonify({'error': 'User not found'}), 404
+
+        user = result.data[0]
+
+        return jsonify({
+            'user': {
+                'id': user['id'],
+                'email': user['email'],
+                'full_name': user['full_name'],
+                'phone': user['phone'],
+                'user_type': user['user_type'],
+                'is_verified': user['is_verified'],
+                'created_at': user['created_at']
+            }
+        }), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/profile', methods=['PUT'])
+@jwt_required
+def update_profile():
+    try:
+        user_id = request.current_user_id
+        data = request.get_json()
+
+        update_data = {
+            'updated_at': datetime.utcnow().isoformat()
+        }
+
+        if data.get('full_name'):
+            update_data['full_name'] = data['full_name']
+
+        if data.get('phone'):
+            if not validate_phone(data['phone']):
+                return jsonify({'error': 'Invalid phone number format'}), 400
+            update_data['phone'] = data['phone']
+
+        result = supabase.table('users').update(update_data).eq('id', user_id).execute()
+
+        if result.data:
+            user = result.data[0]
+            return jsonify({'message': 'Profile updated successfully', 'user': {'id': user['id'], 'full_name': user['full_name'], 'phone': user['phone']}}), 200
+        else:
+            return jsonify({'error': 'Failed to update profile'}), 500
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/profile/password', methods=['PUT'])
+@jwt_required
+def change_password():
+    try:
+        user_id = request.current_user_id
+        data = request.get_json()
+
+        if not data.get('current_password') or not data.get('new_password'):
+            return jsonify({'error': 'current_password and new_password are required'}), 400
+
+        if len(data['new_password']) < 6:
+            return jsonify({'error': 'New password must be at least 6 characters long'}), 400
+
+        # Get user
+        user_result = supabase.table('users').select('*').eq('id', user_id).execute()
+        if not user_result.data:
+            return jsonify({'error': 'User not found'}), 404
+
+        user = user_result.data[0]
+
+        # Verify current password
+        if not verify_password(data['current_password'], user['password_hash']):
+            return jsonify({'error': 'Current password is incorrect'}), 401
+
+        # Hash new password
+        new_password_hash = hash_password(data['new_password'])
+
+        # Update password
+        result = supabase.table('users').update({
+            'password_hash': new_password_hash,
+            'updated_at': datetime.utcnow().isoformat()
+        }).eq('id', user_id).execute()
+
+        if result.data:
+            return jsonify({'message': 'Password changed successfully'}), 200
+        else:
+            return jsonify({'error': 'Failed to change password'}), 500
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+# API Routes - Property Management (Update & Delete)
+@app.route('/api/properties/<property_id>', methods=['PUT'])
+@jwt_required
+def update_property(property_id):
+    try:
+        user_id = request.current_user_id
+
+        # Get property
+        prop_result = supabase.table('properties').select('*').eq('id', property_id).execute()
+        if not prop_result.data:
+            return jsonify({'error': 'Property not found'}), 404
+
+        prop = prop_result.data[0]
+
+        # Check authorization
+        if prop['owner_id'] != user_id:
+            return jsonify({'error': 'Unauthorized'}), 403
+
+        data = request.get_json()
+
+        update_data = {
+            'updated_at': datetime.utcnow().isoformat()
+        }
+
+        # Update allowed fields
+        allowed_fields = ['property_name', 'description', 'address', 'city', 'state', 'pincode',
+                         'total_rooms', 'available_rooms', 'rent_per_month', 'security_deposit',
+                         'gender_preference', 'amenities', 'food_policy', 'visitor_policy']
+
+        for field in allowed_fields:
+            if field in data:
+                update_data[field] = data[field]
+
+        result = supabase.table('properties').update(update_data).eq('id', property_id).execute()
+
+        if result.data:
+            return jsonify({'message': 'Property updated successfully'}), 200
+        else:
+            return jsonify({'error': 'Failed to update property'}), 500
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/properties/<property_id>', methods=['DELETE'])
+@jwt_required
+def delete_property(property_id):
+    try:
+        user_id = request.current_user_id
+
+        # Get property
+        prop_result = supabase.table('properties').select('*').eq('id', property_id).execute()
+        if not prop_result.data:
+            return jsonify({'error': 'Property not found'}), 404
+
+        prop = prop_result.data[0]
+
+        # Check authorization
+        if prop['owner_id'] != user_id:
+            return jsonify({'error': 'Unauthorized'}), 403
+
+        # Delete property (soft delete by marking as rejected)
+        result = supabase.table('properties').update({'status': 'deleted'}).eq('id', property_id).execute()
+
+        if result.data:
+            return jsonify({'message': 'Property deleted successfully'}), 200
+        else:
+            return jsonify({'error': 'Failed to delete property'}), 500
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+# API Routes - Payments
+@app.route('/api/payments', methods=['POST'])
+@jwt_required
+def create_payment():
+    try:
+        user_id = request.current_user_id
+        data = request.get_json()
+
+        required_fields = ['booking_id', 'amount', 'payment_method']
+        for field in required_fields:
+            if not data.get(field):
+                return jsonify({'error': f'{field} is required'}), 400
+
+        payment_data = {
+            'id': str(uuid.uuid4()),
+            'booking_id': data['booking_id'],
+            'user_id': user_id,
+            'amount': data['amount'],
+            'payment_method': data['payment_method'],
+            'status': 'pending',
+            'created_at': datetime.utcnow().isoformat(),
+            'updated_at': datetime.utcnow().isoformat()
+        }
+
+        result = supabase.table('payments').insert(payment_data).execute()
+
+        if result.data:
+            return jsonify({'message': 'Payment created successfully', 'payment': {'id': result.data[0]['id'], 'status': 'pending'}}), 201
+        else:
+            return jsonify({'error': 'Failed to create payment'}), 500
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/payments/<payment_id>', methods=['GET'])
+@jwt_required
+def get_payment(payment_id):
+    try:
+        result = supabase.table('payments').select('*').eq('id', payment_id).execute()
+
+        if not result.data:
+            return jsonify({'error': 'Payment not found'}), 404
+
+        payment = result.data[0]
+
+        return jsonify({
+            'payment': {
+                'id': payment['id'],
+                'booking_id': payment['booking_id'],
+                'amount': payment['amount'],
+                'payment_method': payment['payment_method'],
+                'status': payment['status'],
+                'created_at': payment['created_at']
+            }
+        }), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 # API Routes - Dashboard
 @app.route('/api/dashboard/stats', methods=['GET'])
@@ -732,7 +1453,7 @@ def not_found(error):
 def internal_error(error):
     return jsonify({'error': 'Internal server error'}), 500
 
-# if __name__ == '__main__':
-#     port = int(os.environ.get('PORT'))
-#     app.run(debug=True, host='0.0.0.0', port=port)
+if __name__ == '__main__':
+    port = int(os.environ.get('PORT'))
+    app.run(debug=True, host='0.0.0.0', port=port)
 
